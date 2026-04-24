@@ -67,7 +67,42 @@
     
     // Select
     
+    // Update
+    if (isset($_POST['update'])) {
+        $name       = $_POST['name'];
+        $age        = (int)$_POST['age'];
+        $email      = $_POST['email'];
+        $course     = $_POST['course'];
+        $year_level = (int)$_POST['year_level'];
+        $avatar     = $_POST['avatar'];
+        $graduate   = isset($_POST['graduate']) ? 1 : 0;
 
+        $stmt = $conn->prepare("UPDATE users SET age=?, email=?, course=?, year_level=?, avatar=?, graduate=? WHERE name=?");
+        $stmt->bind_param("issisis", $age, $email, $course, $year_level, $avatar, $graduate, $name);
+
+        if ($stmt->execute()) {
+            echo "User updated successfully<br>";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        $stmt->close();
+    }
+    // Delete
+    if (isset($_POST['delete'])) {
+        $name = $_POST['name'];
+
+        $stmt = $conn->prepare("DELETE FROM users WHERE name=?");
+        $stmt->bind_param("s", $name);
+
+        if ($stmt->execute()) {
+            echo "User deleted successfully<br>";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        $stmt->close();
+    }
     // Close the connection
     $conn->close();
 ?>
