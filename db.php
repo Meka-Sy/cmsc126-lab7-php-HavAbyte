@@ -13,8 +13,7 @@
 
     echo "Connected successfully <br/>";
 
-    // Close the connection
-    $conn->close();
+    
 
     // Create database
     $sql = "CREATE DATABASE univ_sys";
@@ -29,10 +28,10 @@
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
         name VARCHAR(40) NOT NULL, 
         age INT(2) CHECK (age >= 0 AND age <= 99),
-        email VARCHAR(40), NOT NULL UNIQUE CHECK (email LIKE '%@%.%'),
+        email VARCHAR(40) NOT NULL UNIQUE CHECK (email LIKE '%@%.%'),
         course VARCHAR(40) NOT NULL,
         year_level INT(1) CHECK (year_level >= 1 AND year_level <= 4),
-        avatar VARCHAR(255) NOT NULL
+        avatar VARCHAR(255) NOT NULL,
         graduate BOOLEAN,
         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )"; 
@@ -44,9 +43,33 @@
         echo "Error creating table: " . $conn->error; 
     } 
 
-    // Insert
-    $sql .= "INSERT INTO Users (name, age, email, course, year_level, graduate) 
-            VALUES ();"
+    $conn->select_db("univ_sys");
 
+    // Insert
+    if ($_SERVER["REQUEST_METHOD"] == "POST"){
+        $name           = $_POST['name'];
+        $age            = (int)$_POST['age'];
+        $email          = $_POST['email'];
+        $course         = $_POST['course'];
+        $year_level     = (int)$_POST['year_level'];
+        $avatar         = $_POST['avatar'];  
+        $graduate       = isset($_POST['graduate']) ? 1 : 0;
+
+        $stmt = $conn->prepare("INSERT INTO users (name, age, email, course, year_level, avatar, graduate) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sissisi", $name, $age, $email, $course, $year_level, $avatar, $graduate);
+
+        if ($stmt->execute()) {
+            echo "New user registered successfully";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        $stmt->close();
+    }
+    
     // Select
+    
+
+    // Close the connection
+    $conn->close();
 ?>
