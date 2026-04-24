@@ -13,8 +13,6 @@
 
     echo "Connected successfully <br/>";
 
-    
-
     // Create database
     $sql = "CREATE DATABASE univ_sys";
     if ($conn->query($sql) === TRUE) {
