@@ -47,16 +47,16 @@
 
 
     // TABLE 2 
-    CREATE TABLE Accountability (
-        accountability_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        user_id INT UNSIGNED,
-        title VARCHAR(100) NOT NULL,
-        amount DECIMAL(10,2),
-        status VARCHAR(20) DEFAULT 'Pending',
-        date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES Users(id)
-        ON DELETE CASCADE
-);
+    $sql = "CREATE TABLE IF NOT EXISTS Accountability (
+    accountability_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED,
+    title VARCHAR(100) NOT NULL,
+    amount DECIMAL(10,2),
+    status VARCHAR(20) DEFAULT 'Pending',
+    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+    ON DELETE CASCADE
+    )";
 
     if($conn->query($sql) === TRUE){
         echo 'Accountability table created successfully';
