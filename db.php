@@ -78,7 +78,7 @@ if (isset($_POST['register'])) {
 
 // 4. Add accountability (Insert)
 if (isset($_POST['submit'])) {
-    $user_id = $_POST['name'];
+    $user_id = $_POST['user_id'];
     $title = $_POST['title'];
     $amount = (decimal) $_POST['amount'];
     $status = $_POST['status'];
