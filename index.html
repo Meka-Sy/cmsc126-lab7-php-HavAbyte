@@ -70,13 +70,9 @@
                 <h2>Accountability Record</h2>
                 <div class="student-actions">
                     <input type="text" id="studentQueryAccountability" name="student_query" placeholder="Enter Student Name or Number" required><br>
-                    <button type="button" id="add_acc" name="add_acc" class="Name btn-add">Add Accountability</button> <br>
-
-<div id="accFormPlacement"></div>
-
+                    <button type="submit" id="add_acc" name="add_acc" class="Name btn-add">Add Accountability</button> <br>
                     <button type="submit" id="display_acc"name="display_acc" class="Name btn-search">Display Accountability</button> <br>
                     <button type="submit" id="update_acc" name="update_acc" class="Name btn-update">Update Accountability</button> <br>
-
                 </div>
             </form>
                 
@@ -85,6 +81,7 @@
         <template id="templateAccountability" class="templateAccountability">
             <form class="Form2" id="accForm" action="db.php" method="post" enctype="multipart/form-data">
                 <h5>All fields must be filled</h5>
+                <br><br>
                 <label for="Title">Title:</label>
                 <input type="text" id="title" name="title" maxlength="100" required>
                 <br><br>
@@ -96,12 +93,10 @@
                     <option value="Pending" selected>Pending</option>
                     <option value="Approved">Approved</option>
                     <option value="Completed">Completed</option>
-                </select><br><br>
+                </select>
                 <input class="Submit" type="submit2" name="register2" value="Submit">
             </form>
         </template>
-        
-
     </div>
 </body>
 </html>
