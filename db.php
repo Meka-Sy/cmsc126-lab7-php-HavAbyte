@@ -67,25 +67,35 @@ if (isset($_POST['delete'])) {
 }
 
 // 5. Display Table
+// 5. Display Specific Student Record
 if (isset($_POST['search'])) {
-    $studentID = $_POST['studentID'] ?? '';
-    $studentName = $_POST['studentName'] ?? '';
-    // Create the base query
+    $studentID = trim($_POST['studentID'] ?? '');
+    $studentName = trim($_POST['studentName'] ?? '');
+
+    // Check if both are empty first
+    if (empty($studentID) && empty($studentName)) {
+        echo "<p style='color:orange;'>Please enter an ID or Name to search.</p>";
+        return;
+    }
+
+    // Initialize variables
+    $stmt = null;
+
+    // Search Logic: If ID is provided, use ID. Otherwise, use Name.
     if (!empty($studentID)) {
-        // Search by ID
+        // Search by ID (Exact match)
         $stmt = $conn->prepare("SELECT * FROM Users WHERE id = ?");
         $stmt->bind_param("i", $studentID);
-    } elseif (!empty($studentName)) {
-        // Search by Name (using LIKE for partial matches)
+    } else {
+        // Search by Name (Partial match)
         $nameParam = "%$studentName%";
         $stmt = $conn->prepare("SELECT * FROM Users WHERE name LIKE ?");
         $stmt->bind_param("s", $nameParam);
-    } else {
-        echo "<p style='color:orange;'>Please enter an ID or Name to search.</p>";
-        return; // Exit if both are empty
     }
+
     $stmt->execute();
     $result = $stmt->get_result();
+
     if ($result->num_rows > 0) {
         echo "<h2>Record Found</h2>";
         echo "<table border='1'>
