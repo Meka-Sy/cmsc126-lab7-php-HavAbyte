@@ -55,7 +55,6 @@ if (isset($_POST['register'])) {
 
 // 4. Handle Delete
 if (isset($_POST['delete'])) {
-    // Note: In a real app, you'd use ID. Here we use Name as per your structure.
     $id = $_POST['studentID']; 
     $stmt = $conn->prepare("DELETE FROM Users WHERE id=?");
     $stmt->bind_param("i", $id);
@@ -67,63 +66,14 @@ if (isset($_POST['delete'])) {
 }
 
 // 5. Display Table
-// 5. Display Specific Student Record
-if (isset($_POST['search'])) {
-    $studentID = trim($_POST['studentID'] ?? '');
-    $studentName = trim($_POST['studentName'] ?? '');
-
-    // Check if both are empty first
-    if (empty($studentID) && empty($studentName)) {
-        echo "<p style='color:orange;'>Please enter an ID or Name to search.</p>";
-        return;
+$result = $conn->query("SELECT * FROM Users");
+if ($result->num_rows > 0) {
+    echo "<h2>User List</h2><table border='1'><tr><th>ID</th><th>Name</th><th>Email</th><th>Year</th></tr>";
+    while($row = $result->fetch_assoc()) {
+        echo "<tr><td>".$row["id"]."</td><td>".$row["name"]."</td><td>".$row["email"]."</td><td>".$row["year_level"]."</td></tr>";
     }
-
-    // Initialize variables
-    $stmt = null;
-
-    // Search Logic: If ID is provided, use ID. Otherwise, use Name.
-    if (!empty($studentID)) {
-        // Search by ID (Exact match)
-        $stmt = $conn->prepare("SELECT * FROM Users WHERE id = ?");
-        $stmt->bind_param("i", $studentID);
-    } else {
-        // Search by Name (Partial match)
-        $nameParam = "%$studentName%";
-        $stmt = $conn->prepare("SELECT * FROM Users WHERE name LIKE ?");
-        $stmt->bind_param("s", $nameParam);
-    }
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        echo "<h2>Record Found</h2>";
-        echo "<table border='1'>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Course</th>
-                    <th>Year</th>
-                    <th>Status</th>
-                </tr>";
-        
-        while($row = $result->fetch_assoc()) {
-            $gradStatus = $row["graduate"] ? "Graduated" : "Undergraduate";
-            echo "<tr>
-                    <td>".$row["id"]."</td>
-                    <td>".$row["name"]."</td>
-                    <td>".$row["email"]."</td>
-                    <td>".$row["course"]."</td>
-                    <td>".$row["year_level"]."</td>
-                    <td>".$gradStatus."</td>
-                  </tr>";
-        }
-        echo "</table>";
-    } else {
-        echo "<p style='color:red;'>No record found matching those criteria.</p>";
-    }
-    $stmt->close();
+    echo "</table>";
 }
+
 $conn->close();
 ?>
