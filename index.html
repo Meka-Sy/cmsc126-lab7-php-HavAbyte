@@ -61,16 +61,16 @@
                 <div class="student-actions">
                     <input type="text" id="studentQueryRecord" name="student_query" placeholder="Enter Student Name or Number" required>
                     <br>
-                    <button type="submit" id="search_student" name="search_student" class="ID btn-search">Search Student</button> <br>
-                    <button type="submit" id="update_student" name="update_student" class="ID btn-update">Update Student</button> <br>
-                    <button type="submit" id="delete_student" name="delete_student" class="ID btn-delete">Delete Student</button><br>
+                    <button type="submit" name="search_student" class="ID btn-search">Search Student</button> <br>
+                    <button type="submit" name="update_student" class="ID btn-update">Update Student</button> <br>
+                    <button type="submit" name="delete_student" class="ID btn-delete">Delete Student</button><br>
                 </div>
             </form>
             <form action="db.php" method="POST">
                 <h2>Accountability Record</h2>
                 <div class="student-actions">
                     <input type="text" id="studentQueryAccountability" name="student_query" placeholder="Enter Student Name or Number" required><br>
-                    <button type="submit" id="add_acc" name="add_acc" class="Name btn-update">Add Accountability</button> <br>
+                    <button type="submit" id="add_acc" name="add_acc" class="Name btn-add">Add Accountability</button> <br>
                     <button type="submit" id="display_acc"name="display_acc" class="Name btn-search">Display Accountability</button> <br>
                     <button type="submit" id="update_acc" name="update_acc" class="Name btn-update">Update Accountability</button> <br>
 
@@ -79,7 +79,7 @@
                 
         </div>
 
-        <template class="templateAccountability">
+        <template id="template_acc" class="templateAccountability">
             <form class="Form2" id="accForm" action="db.php" method="post" enctype="multipart/form-data">
                 <h5>All fields must be filled</h5>
                 <br><br>
@@ -95,7 +95,7 @@
                     <option value="Approved">Approved</option>
                     <option value="Completed">Completed</option>
                 </select>
-                <input class="Submit" type="submit2" id="register2" name="register2" value="Submit">
+                <input class="Submit" type="submit2" name="register2" value="Submit">
             </form>
         </template>
         
