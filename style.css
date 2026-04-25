@@ -1,24 +1,66 @@
+@font-face {
+    font-family:'Poversty';
+    src: url('fonts/poversty/Poversty.otf') format('opentype'),
+            url('fonts/poversty/Poversty.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 h1 {
     background-color:rgb(189, 212, 220);
     color: rgb(10, 75, 97);
     text-align: center;
-    padding: 15px;
-    border-color:gray;
-    border-width: 1px;
-    border-style: solid;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    size: 100px;
+    padding: 25px;
+    border-color: rgb(25, 41, 49);
+    border-width: 5px;
+    border-style: groove;
+    font-family: 'Poversty', sans-serif;
+    border-radius: 8px;
+    
 }
-.Form{
-    background-color: rgb(175, 206, 217);
-    margin: 0 auto;
-    padding: 20px;
-    border-color:gray;
-    border-width: 2px;
-    border-style: solid;
-    text-align: center;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+h2{
+    color: rgb(10, 75, 97);
+    font-family: 'Poversty', sans-serif;
+    margin: 20px;
+    text-decoration: underline;
+    
+
 }
-.Name{
+h5 {
+    color:red;
+    font-family: 'Poversty', sans-serif;
+}
+.entirePage{
+    background-color:rgb(189, 212, 220);
+    border-color: rgb(0, 45, 26);
+    border-width: 5px;
+    border-style:double;
+
+}
+.registerSection{
+    background-color: rgb(25, 41, 49);
+    padding: 50px;
+    border-color: white;
+    border-width: 5px;
+    border-style:dashed;
+}
+.grid-layout{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 15px;
+}
+.Form {
+    max-width: 500px;   
+    width: 90%; 
+    margin: 20px auto; 
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-family: 'Poversty', sans-serif;
+}
+.name{
     color: rgb(17, 132, 170);
     text-align: center;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
@@ -43,15 +85,33 @@ h1 {
     text-align: center;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
-.Avatar{
-    color: rgb(17, 132, 170);
-    text-align: center;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+.upload-section {
+  color: rgb(17, 132, 170);
+  text-align: center;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
+.header-label {
+  text-align: left !important;
+}
+.field-title{
+  text-align: left !important;
+}
+.drop-zone-content{
+  background-color: rgb(151, 189, 191);
+  border-radius:20px;
+  padding: 20px;
+  border-color:rgb(3, 118, 152);
+  border-width: 2px;
+  border-style: dotted;
+
+}
+
+
+
 .Graduate{
     color: rgb(17, 132, 170);
     text-align: center;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .Submit{
     background-color: rgb(17, 132, 170);
@@ -69,3 +129,129 @@ h1 {
     border-width: 2px;
     border-style: solid;
 }
+.recordManagement{
+    background-color:rgb(189, 212, 220);
+    padding:100px;
+}
+
+
+.student-actions {
+  display: grid;
+  align-items: center;
+  gap: 5px;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.id-input {
+  align-items: center;
+  padding: 10px 15px;
+  border: 2px solid #ccc; 
+  border-radius: 4px;
+  width: 280px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.id-input:focus:valid {
+  border-color: #198754;
+  box-shadow: 0 0 5px rgba(25, 135, 84, 0.2);
+}
+
+.id-input:focus:invalid:not(:placeholder-shown) {
+  border-color: #dc3545;
+  box-shadow: 0 0 5px rgba(220, 53, 69, 0.2);
+}
+
+.ID {
+  display: block;
+  margin: auto;
+  align-items: center;
+  padding: 20px 250px;
+  background-color: transparent;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+.Name {
+  display: block;
+  margin: auto;
+  align-items: center;
+  padding: 20px 250px;
+  background-color: transparent;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-search {
+  border: 1.5px solid #0056b3;
+  color: #0056b3;
+  align-items: center;
+
+}
+.btn-search:hover {
+  background-color: #0056b3;
+  color: white;
+}
+.btn-search {
+  border: 1.5px solid #0056b3;
+  color: #0056b3;
+  align-items: center;
+
+}
+.btn-search:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
+.btn-update {
+  border: 1.5px solid #198754;
+  color: #198754;
+  align-items: center;
+}
+.btn-update:hover {
+  background-color: #198754;
+  color: white;
+}
+.btn-update {
+  border: 1.5px solid #198754;
+  color: #198754;
+  align-items: center;
+}
+.btn-update:hover {
+  background-color: #198754;
+  color: white;
+}
+
+.btn-delete {
+  border: 1.5px solid #dc3545;
+  color: #dc3545;
+  align-items: center;
+}
+.btn-delete:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn:disabled {
+  border-color: #ccc;
+  color: #ccc;
+  cursor: not-allowed;
+}
+.accountability{
+  display: grid;
+  align-items: center;
+  gap: 5px;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+
+
