@@ -1,5 +1,5 @@
 <?php
-    $servername = "localhost";      // Server name
+    /* $servername = "localhost";      // Server name
     $username = "username";         // username
     $password = "password";         // password
 
@@ -43,6 +43,10 @@
 
     $conn->select_db("univ_sys");
 
+*/
+
+    include 'DBConnector.php';
+
     // Insert
     if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $name           = $_POST['name'];
@@ -63,11 +67,9 @@
         }
 
         $stmt->close();
+
+        // Close the connection
+        $conn->close();
     }
     
-    // Select
-    
-
-    // Close the connection
-    $conn->close();
 ?>
