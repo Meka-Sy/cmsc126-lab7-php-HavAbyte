@@ -60,35 +60,18 @@ h5 {
     background-color: #f9f9f9;
     font-family: 'Poversty', sans-serif;
 }
-.name{
-    color: rgb(17, 132, 170);
+
+
+.registerSection {
     text-align: center;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-}
-.Age{
     color: rgb(17, 132, 170);
-    text-align: center;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-.Email{
-    color: rgb(17, 132, 170);
-    text-align: center;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-}
-.Course{
-    color: rgb(17, 132, 170);
-    text-align: center;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-}
-.YearLevel{
-    color: rgb(17, 132, 170);
-    text-align: center;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-}
+
 .upload-section {
   color: rgb(17, 132, 170);
   text-align: center;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .header-label {
   text-align: left !important;
@@ -103,10 +86,7 @@ h5 {
   border-color:rgb(3, 118, 152);
   border-width: 2px;
   border-style: dotted;
-
 }
-
-
 
 .Graduate{
     color: rgb(17, 132, 170);
@@ -129,12 +109,16 @@ h5 {
     border-width: 2px;
     border-style: solid;
 }
+#file-input {
+  background-color:rgb(189, 212, 220);
+  padding:50px;
+  border-radius: 20px;
+  
+}
 .recordManagement{
     background-color:rgb(189, 212, 220);
     padding:100px;
 }
-
-
 .student-actions {
   display: grid;
   align-items: center;
@@ -151,7 +135,6 @@ h5 {
   width: 280px;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .id-input:focus:valid {
@@ -165,7 +148,7 @@ h5 {
 }
 
 .ID {
-  display: block;
+  display: grid;
   margin: auto;
   align-items: center;
   padding: 20px 250px;
@@ -177,7 +160,7 @@ h5 {
   transition: all 0.2s ease-in-out;
 }
 .Name {
-  display: block;
+  display: grid;
   margin: auto;
   align-items: center;
   padding: 20px 250px;
@@ -189,6 +172,9 @@ h5 {
   transition: all 0.2s ease-in-out;
 }
 
+#add_acc{
+  padding: 20px 260px;
+}
 .btn-search {
   border: 1.5px solid #0056b3;
   color: #0056b3;
@@ -203,7 +189,6 @@ h5 {
   border: 1.5px solid #0056b3;
   color: #0056b3;
   align-items: center;
-
 }
 .btn-search:hover {
   background-color: #0056b3;
@@ -219,13 +204,13 @@ h5 {
   background-color: #198754;
   color: white;
 }
-.btn-update {
-  border: 1.5px solid #198754;
-  color: #198754;
+.btn-add {
+  border: 1.5px solid #dc3545;
+  color: #dc3545;
   align-items: center;
 }
-.btn-update:hover {
-  background-color: #198754;
+.btn-add:hover {
+  background-color: #dc3545;
   color: white;
 }
 
@@ -252,6 +237,16 @@ h5 {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.Form2 {
+  max-width: 500px;   
+  width: 90%; 
+  margin: 20px auto; 
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-family: 'Poversty', sans-serif;
 
+}
 
 
