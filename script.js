@@ -100,7 +100,12 @@ updateBtn.addEventListener('click', function() {
 });
 
 
-// teka
+
+document.getElementById("add_acc").addEventListener('click', function() {
+const template = document.getElementById("templateAccountability");
+
+// wait
+
 document.getElementById("accForm").addEventListener("submit", function (e) {
         const title = document.getElementById("title").value.trim();
         const amount = parseFloat(document.getElementById("amount").value.trim());
@@ -111,3 +116,5 @@ document.getElementById("accForm").addEventListener("submit", function (e) {
             return;
         }
     });
+
+});
