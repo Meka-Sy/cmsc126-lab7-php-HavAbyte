@@ -49,13 +49,13 @@ if (isset($_POST['register'])) {
     $stmt->close();
 }
 
-if (isset($_POST['delete'])) {
-    $id = $_POST['studentID']; 
-    $stmt = $conn->prepare("DELETE FROM Users WHERE id=?");
-    $stmt->bind_param("i", $id);
+if (isset($_POST['delete_student'])) {
+    $id = $_POST['student_query']; 
+    $stmt = $conn->prepare("DELETE FROM Users WHERE id=? OR name=?");
+    $stmt->bind_param("is", $query,$query);
     
     if ($stmt->execute()) {
-        echo "Record deleted successfully";
+        echo "<p style='color:red;'>Record deleted successfully (if it existed).</p>";
     }
     $stmt->close();
 }
@@ -72,8 +72,11 @@ if (isset($_POST['search_student'])) {
             $stmt->bind_param("i", $query);
         } else {
             // UPDATED: Exact Name Match (Removed LIKE and wildcards)
-            $stmt = $conn->prepare("SELECT * FROM Users WHERE name = ?");
-            $stmt->bind_param("s", $query);
+            $searchTerm = "%$query%";
+            $stmt = $conn->prepare("SELECT * FROM Users WHERE name LIKE ?");
+            $stmt->bind_param("s", $searchTerm);
+}
+            
         }
 
         $stmt->execute();
