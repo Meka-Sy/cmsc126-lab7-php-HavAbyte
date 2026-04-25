@@ -116,8 +116,7 @@ if (isset($_POST['search_acc'])) {
     if (empty($query)) {
         echo "<p style='color:orange;'>Please enter a Student ID to check accountability.</p>";
     } else {
-        // Typically, you would JOIN a balances table here. 
-        // For this example, we search the User to see if they are cleared.
+        
         $stmt = $conn->prepare("SELECT name, course, year_level FROM Users WHERE id = ?");
         $stmt->bind_param("i", $query);
         $stmt->execute();
