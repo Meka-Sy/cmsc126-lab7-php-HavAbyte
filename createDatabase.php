@@ -22,7 +22,7 @@
         echo "Error creating database: " . $conn->error;
     }
 
-    // Select database BEFORE making tables
+    // Select database before making tables
     $conn->select_db("univ_sys");
 
 
