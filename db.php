@@ -67,14 +67,53 @@ if (isset($_POST['delete'])) {
 }
 
 // 5. Display Table
-$result = $conn->query("SELECT * FROM Users");
-if ($result->num_rows > 0) {
-    echo "<h2>User List</h2><table border='1'><tr><th>ID</th><th>Name</th><th>Email</th><th>Year</th></tr>";
-    while($row = $result->fetch_assoc()) {
-        echo "<tr><td>".$row["id"]."</td><td>".$row["name"]."</td><td>".$row["email"]."</td><td>".$row["year_level"]."</td></tr>";
+if (isset($_POST['search'])) {
+    $studentID = $_POST['studentID'] ?? '';
+    $studentName = $_POST['studentName'] ?? '';
+    // Create the base query
+    if (!empty($studentID)) {
+        // Search by ID
+        $stmt = $conn->prepare("SELECT * FROM Users WHERE id = ?");
+        $stmt->bind_param("i", $studentID);
+    } elseif (!empty($studentName)) {
+        // Search by Name (using LIKE for partial matches)
+        $nameParam = "%$studentName%";
+        $stmt = $conn->prepare("SELECT * FROM Users WHERE name LIKE ?");
+        $stmt->bind_param("s", $nameParam);
+    } else {
+        echo "<p style='color:orange;'>Please enter an ID or Name to search.</p>";
+        return; // Exit if both are empty
     }
-    echo "</table>";
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        echo "<h2>Record Found</h2>";
+        echo "<table border='1'>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Course</th>
+                    <th>Year</th>
+                    <th>Status</th>
+                </tr>";
+        
+        while($row = $result->fetch_assoc()) {
+            $gradStatus = $row["graduate"] ? "Graduated" : "Undergraduate";
+            echo "<tr>
+                    <td>".$row["id"]."</td>
+                    <td>".$row["name"]."</td>
+                    <td>".$row["email"]."</td>
+                    <td>".$row["course"]."</td>
+                    <td>".$row["year_level"]."</td>
+                    <td>".$gradStatus."</td>
+                  </tr>";
+        }
+        echo "</table>";
+    } else {
+        echo "<p style='color:red;'>No record found matching those criteria.</p>";
+    }
+    $stmt->close();
 }
-
 $conn->close();
 ?>
