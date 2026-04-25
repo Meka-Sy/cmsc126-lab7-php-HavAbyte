@@ -2,55 +2,94 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="script.js" defer></script>
         <title>Website</title>
     </head>
     <body>
-        <h1> User Registration Form</h1>
-        <form class="Form" action="/submit-form" method="post" enctype="multipart/form-data">
-            <label class="Name"for="Name">Name:</label>
-            <input type="text" id="Name" name="Name" maxlength="40" required>
-            <br><br>
-            <label class="Age"for="age">Age:</label>
-            <input type="number" id="age" name="age" maxlength="2" required>
-            <br><br>
-            <label class="Email" for="email">Email:</label>
-            <input type="email" id="email" name="email" maxlength="40" required>
-            <br><br>
-            <label class="Course" for="course">Course:</label>
-            <input type="text" id="course" name="course" maxlength="40" required>
-            <br><br>
-            <label class="YearLevel" for="year_level">Year Level:</label>
-            <div>
-                <input type="radio" id="first_year" name="year_level" value="First Year" required>
-                <label for="first_year">First Year</label>
-                <input type="radio" id="second_year" name="year_level" value="Second Year" required>
-                <label for="second_year">Second Year</label>
-                <input type="radio" id="third_year" name="year_level" value="Third Year" required>
-                <label for="third_year">Third Year</label>
-                <input type="radio" id="fourth_year" name="year_level" value="Fourth Year" required>
-                <label for="fourth_year">Fourth Year</label>
+        
+        <div class="entirePage">
+            <h1> Student Registration Form</h1>
+            
+            <div class="registerSection">
+                
+                <form class="Form" action="/submit-form" method="post" enctype="multipart/form-data">
+                    <h5>All fields must be field</h5>
+                    <label class="name"for="Name">Name:</label>
+                    <input type="text" id="Name" name="Name" maxlength="40" required>
+                    <br><br>
+                    <label class="Age"for="age">Age:</label>
+                    <input type="number" id="age" name="age" maxlength="2" required>
+                    <br><br>
+                    <label class="Email" for="email">Email:</label>
+                    <input type="email" id="email" name="email" maxlength="40" required>
+                    <br><br>
+                    <label class="Course" for="course">Course:</label>
+                    <input type="text" id="course" name="course" maxlength="40" required>
+                    <br><br>
+                    <label class="YearLevel" for="year_level">Year Level:</label><br><br>
+                    <div>
+                        <input type="radio" id="first_year" name="year_level" value="First Year" required>
+                        <label for="first_year">First Year</label>
+                        <input type="radio" id="second_year" name="year_level" value="Second Year" required>
+                        <label for="second_year">Second Year</label>
+                        <input type="radio" id="third_year" name="year_level" value="Third Year" required>
+                        <label for="third_year">Third Year</label>
+                        <input type="radio" id="fourth_year" name="year_level" value="Fourth Year" required>
+                        <label for="fourth_year">Fourth Year</label>
+                    </div>
+                    <br><br>
+                    <div class="upload-section">
+                        <p class="header-label">PROFILE PHOTO</p>
+                        <p class="field-title">Profile Image *</p>
+
+                        <label for="file-input" class="drop-zone" id="drop-area">
+                        <input type="file" id="file-input" accept="image/*" hidden>
+    
+                        <div class="drop-zone-content">
+                        <div class="icon">🖼️</div>
+                        <p><span class="highlight">Choose a file</span> or drag it here</p>
+                        <p class="file-types">JPG, PNG, GIF, WEBP accepted</p>
+                        </div>
+                        </label>
+                    </div>
+
+                    <br><br>
+                    <label class="Graduate" for="graduate">Graduating this year?</label>
+                    <input type="checkbox" id="graduate" name="graduate" value="yes">
+                    <br><br>
+                    <input class="Submit"type="submit" value="Submit">
+                </form>
             </div>
-            <label class="Avatar" for="avatar">Choose an avatar:</label>
-            <div>
-                
-                <input type="radio" id="avatar1" name="avatar" value="avatar1.jpg" required>
-                <img src="Images/avatar1.jpg" alt="Avatar 1" width="100">
-                
-                <input type="radio" id="avatar2" name="avatar" value="avatar2.jpg" required>
-                <img src="Images/avatar2.jpg" alt="Avatar 2" width="100">
-                
-                <input type="radio" id="avatar3" name="avatar" value="avatar3.jpg" required>
-                <img src="Images/avatar3.jpg" alt="Avatar 3" width="100">
+            <div class="recordManagement">
+                <h1>STUDENT RECORD MANAGEMENT SYSTEM</h1>
+
+                <h2>Student Record</h2>
+
+                <div class="student-actions">
+                    <input type="text" id="studentID" name="studentID" 
+                                placeholder="Enter Student ID (e.g. 2024-00123)" 
+                                pattern="[0-9]{4}-[0-9]{5}" 
+                                title="Format should be YYYY-XXXXX" 
+                                required class="id-input">
+                    <br>
+                    <button type="button" id="searchIDBtn" class="ID btn-search">Search Student</button> <br>
+                    <button type="button" id="updateIDBtn" class="ID btn-update">Update Student</button> <br>
+                    <button type="button" id="deleteIDBtn" class="ID btn-delete">Delete Student</button><br>
+                </div>
+                <div class="accountability">
+                    <h2>Student Accountability</h2>
+                    <input type="text" id="studentName" name="studentID" 
+                                placeholder="Enter Student Name (e.g. Jose Rizal)" 
+                                pattern="[0-9]{4}-[0-9]{5}" 
+                                title="Format should be YYYY-XXXXX" 
+                                required class="id-input">
+                    <br>
+                    <button type="button" id="searchNameBtn" class="Name btn-search">Search Accountability</button> <br>
+                    <button type="button" id="updateNameBtn" class="Name btn-update"> Edit Accountability   </button> <br>                    
+                </div>
             </div>
-            <br><br>
-            <label class="Graduate" for="graduate">Graduating this year?</label>
-            <input type="checkbox" id="graduate" name="graduate" value="yes">
-            <br><br>
-            <input class="Submit"type="submit" value="Submit">
 
-
-        </form>
-
+        </div>
     </body>
 </html>
