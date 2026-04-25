@@ -80,7 +80,7 @@ if (isset($_POST['register'])) {
 if (isset($_POST['submit'])) {
     $user_id = $_POST['name'];
     $title = $_POST['title'];
-    $amount = (DECIMAL) $_POST['amount'];
+    $amount = (decimal) $_POST['amount'];
     $status = $_POST['status'];
 
     $stmt = $conn->prepare("INSERT INTO Accountability (user_id, title, amount, status) VALUES (?, ?, ?, ?)");
