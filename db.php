@@ -156,5 +156,24 @@ if (isset($_POST['search'])) {
     }
 }
 
+    
+// Update
+if (isset($_POST['update_student'])) {
+    $id = (int)$_POST['student_query'];
+
+    $stmt = $conn->prepare("SELECT * FROM Users WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $editData = $result->fetch_assoc();
+
+    $stmt->close();
+
+    header('Content-Type: application/json');
+    echo json_encode($editData);
+    exit;
+}
+
 $conn->close();
 ?>
