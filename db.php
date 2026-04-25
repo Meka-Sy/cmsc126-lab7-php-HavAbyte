@@ -65,14 +65,61 @@ if (isset($_POST['delete'])) {
     $stmt->close();
 }
 
-// 5. Display Table
-$result = $conn->query("SELECT * FROM Users");
-if ($result->num_rows > 0) {
-    echo "<h2>User List</h2><table border='1'><tr><th>ID</th><th>Name</th><th>Email</th><th>Year</th></tr>";
-    while($row = $result->fetch_assoc()) {
-        echo "<tr><td>".$row["id"]."</td><td>".$row["name"]."</td><td>".$row["email"]."</td><td>".$row["year_level"]."</td></tr>";
+// 5. Logic for Student Record Search (UPDATED FOR EXACT MATCH)
+if (isset($_POST['search_student'])) {
+    $query = trim($_POST['student_query'] ?? '');
+
+    if (empty($query)) {
+        echo "<p style='color:orange;'>Please enter an ID or Name to search.</p>";
+    } else {
+        if (is_numeric($query)) {
+            // Search by ID
+            $stmt = $conn->prepare("SELECT * FROM Users WHERE id = ?");
+            $stmt->bind_param("i", $query);
+        } else {
+            // UPDATED: Exact Name Match (Removed LIKE and wildcards)
+            $stmt = $conn->prepare("SELECT * FROM Users WHERE name = ?");
+            $stmt->bind_param("s", $query);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            echo "<h2>Student Record Found</h2>";
+            echo "<table border='1'>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Status</th>
+                    </tr>";
+            
+            while($row = $result->fetch_assoc()) {
+                $gradStatus = $row["graduate"] ? "Graduated" : "Undergraduate";
+                echo "<tr>
+                        <td>".htmlspecialchars($row["id"])."</td>
+                        <td>".htmlspecialchars($row["name"])."</td>
+                        <td>".htmlspecialchars($row["email"])."</td>
+                        <td>".htmlspecialchars($row["course"])."</td>
+                        <td>".htmlspecialchars($row["year_level"])."</td>
+                        <td>".$gradStatus."</td>
+                      </tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "<p style='color:red;'>No student found matching exactly '" . htmlspecialchars($query) . "'.</p>";
+        }
+        $stmt->close();
     }
-    echo "</table>";
+}
+
+// 6. Logic for Accountability Search
+if (isset($_POST['search_acc'])) {
+    $query = trim($_POST['student_query'] ?? '');
+    // Similar logic as above would go here
 }
 
 $conn->close();
