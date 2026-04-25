@@ -13,46 +13,101 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
     });
-});  
 
-function validateForm(name, age, email, course, year_level, avatar) {
+}); 
+
+
+
+ 
+function validateForm(name, age, email, course, year_level, grad_status, file_input) {
     let isValid = true;
 
-    // name validations
-    if(name.length < 2 || !name.includes(" ")){
+    if (name.length < 2 || name.length > 40) {
         isValid = false;
-        alert("Valid name must be entered.");
+        alert("Name must be between 2 and 40 characters.");
     }
 
-    // age validations
-    if(isNaN(age) || age < 0 || age > 99){
+    if (isNaN(age) || age < 0 || age > 99) {
         isValid = false;
         alert("Age must be between 0 and 99.");
     }
 
-    // email validations
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(!emailRegex.test(email)){
+    if (!emailRegex.test(email) || email.length > 40) {
         isValid = false;
-        alert("Invalid email format.");
+        alert("Invalid email or exceeds 40 characters.");
     }
 
-    // course validations
-    if(course.length < 5){
+    if (course.length === 0 || course.length > 40) {
         isValid = false;
-        alert("Course must be entered.");
+        alert("Course is required (Max 40 chars).");
     }
 
-    // year level validations
-    if(!year_level){
+    if (!year_level || !['1', '2', '3', '4'].includes(year_level.value)) {
         isValid = false;
-        alert("Year Level must be entered.");
+        alert("Please select a Year Level (1-4).");
     }
-    
-    // avatar validations
-    if(!avatar){
-        alert("Select an avatar.");
+
+
+
+    if (file_input.files.length === 0) {
+        isValid = false;
+        alert("Please upload an image.");
     }
 
     return isValid;
 }
+
+const studentInput = document.getElementById('studentName');
+const searchBtn = document.getElementById('searchNameBtn');
+const updateBtn = document.getElementById('updateNameBtn');
+
+searchBtn.addEventListener('click', function() {
+    const nameValue = studentInput.value;
+
+    // Send the name to your PHP file
+    fetch(`search.php?name=${encodeURIComponent(nameValue)}`)
+        .then(response => response.text()) // Wait for the PHP response
+        .then(data => {
+            // 'data' is whatever your PHP file "echoes"
+            console.log("Response from PHP:", data);
+            alert("Result: " + data);
+        })
+        .catch(error => console.error('Error:', error));
+});
+updateBtn.addEventListener('click', function() {
+    const nameValue = studentInput.value;
+
+    if (!nameValue) {
+        alert("Please enter a name to edit.");
+        return;
+    }
+
+    // Using POST to send data
+    fetch('update.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `studentName=${encodeURIComponent(nameValue)}&status=updated`
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log("Server says:", data);
+        alert("Update status: " + data);
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+
+// teka
+document.getElementById("accForm").addEventListener("submit", function (e) {
+        const title = document.getElementById("title").value.trim();
+        const amount = parseFloat(document.getElementById("amount").value.trim());
+        const status = document.querySelector('input[name="status"]:checked');
+       
+        if (!validateForm(name, age, email, course, year_level, avatar)) {
+            e.preventDefault();
+            return;
+        }
+    });
