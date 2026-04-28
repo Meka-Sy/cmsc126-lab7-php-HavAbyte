@@ -78,27 +78,39 @@ if (isset($_POST['register'])) {
 
 // 4. Add accountability (Insert)
 if (isset($_POST['register2'])) {
-    $user_id = $_POST['user_id'];
+    $identifier = $_POST['student_identifier'];
     $title = $_POST['title'];
     $amount = (float) $_POST['amount'];
     $status = $_POST['status'];
 
-    $stmt = $conn->prepare("INSERT INTO Accountability (user_id, title, amount, status) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("isds", $user_id, $title, $amount, $status);
-    // Redirects to homepage after submission
-    if ($stmt->execute()) {
-        header("Location:index.html?success=1");
-        exit();
-    } else {
-        echo "Error: " . $stmt->error;
-    }
+    $findStudent = $conn->prepare("SELECT id FROM Users WHERE id = ? OR name = ?");
+    $findStudent->bind_param("is", $identifier, $identifier);
+    $findStudent->execute();
+    $res = $findStudent->get_result();
 
-    $stmt->close();
+    if($user = $res->fetch_assoc()){
+        $user_id = $user['id'];
+        $stmt = $conn->prepare("INSERT INTO Accountability (user_id, title, amount, status) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("isds", $user_id, $title, $amount, $status);
+        // Redirects to homepage after submission
+        if ($stmt->execute()) {
+            header("Location:index.html?success=1");
+            exit();
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        $stmt->close(); 
+    }
+    
+    else {
+        echo "<script>alert('User not found. Cannot add accountability.'); window.location='index.html';</script>";
+    }
     
 }
 
 // 4. Handle Delete
-if (isset($_POST['delete'])) {
+if (isset($_POST['delete_student'])) {
     $id = $_POST['studentID']; 
     $stmt = $conn->prepare("DELETE FROM Users WHERE id=?");
     $stmt->bind_param("i", $id);
@@ -109,9 +121,9 @@ if (isset($_POST['delete'])) {
     $stmt->close();
 }
 
-if (isset($_POST['search'])) {
+if (isset($_POST['search_student'])) {
     // Single input field - can be either ID or Name
-    $query = trim($_POST['studentID'] ?? ''); // Assuming your single field is named 'studentID'
+    $query = trim($_POST['student_query'] ?? ''); // Assuming your single field is named 'studentID'
 
     if (empty($query)) {
         echo "<p style='color:orange;'>Please enter a Student ID or Name to search.</p>";
