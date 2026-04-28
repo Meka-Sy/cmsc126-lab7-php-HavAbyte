@@ -6,9 +6,9 @@ document.addEventListener("DOMContentLoaded", function() {
         const email = document.getElementById("email").value.trim();
         const course = document.getElementById("course").value.trim();
         const year_level = document.querySelector('input[name="year_level"]:checked');
-        const avatar = document.querySelector('input[name="avatar"]:checked');
+        const file_input = document.querySelector('input[name="profile_photo"]');
 
-        if (!validateForm(name, age, email, course, year_level, avatar)) {
+        if (!validateForm(name, age, email, course, year_level, file_input)) {
             e.preventDefault();
             return;
         }
@@ -64,20 +64,28 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
             
+            const clone = document.getElementById("templateAccountability").content.cloneNode(true);
+            const form = clone.querySelector("form");
+
             const student = document.createElement("input");
             student.type = "hidden";
-            student.name = "user_identifier";
+            student.name = "student_identifier";
             student.value = student_query;
+            form.appendChild(student);
 
-        
-            document.getElementById("accForm").addEventListener("submit", function (e) {
-                const clone = document.getElementById("templateAccountability").content.cloneNode(true);
-                const title = document.getElementById("title").value.trim();
-                const amount = parseFloat(document.getElementById("amount").value.trim());
-                const status = document.querySelector('input[name="status"]:checked');
+            form.addEventListener('submit', function (e) {
+                const title = form.querySelector('[name="title"]').value.trim();
+                const amount = parseFloat(form.querySelector('[name="amount"]').value);
+                const status = form.querySelector('select[name="status"]').value;
+                
+                if (!validateAcc(title, amount, status)) {
+                    e.preventDefault();
+                    return;
+                }
 
-                document.getElementById("accFormPlacement").appendChild(clone);
             });
+
+            document.getElementById("accFormPlacement").appendChild(clone);
             
     
         });
@@ -92,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
 }); 
 
 
-function validateForm(name, age, email, course, year_level, grad_status, file_input) {
+function validateForm(name, age, email, course, year_level, file_input) {
     let isValid = true;
 
     if (name.length < 2 || name.length > 40) {
@@ -122,7 +130,7 @@ function validateForm(name, age, email, course, year_level, grad_status, file_in
     }
 
 
-    if (file_input.files.length === 0) {
+    if (file_input.files.length === 0 || !file_input) {
         isValid = false;
         alert("Please upload an image.");
     }
@@ -130,3 +138,23 @@ function validateForm(name, age, email, course, year_level, grad_status, file_in
     return isValid;
 }
 
+function validateAcc(title, amount, status) {
+    let isValid = true;
+
+    if (title.length === 0) {
+        isValid = false;
+        alert("Title is required.");
+    }
+
+    if (isNaN(amount) || amount < 0) {
+        isValid = false;
+        alert("Invalid amount.");
+    }
+
+    if (!status) {
+        isValid = false;
+        alert("Please select a status.");
+    }
+
+    return isValid;
+}
