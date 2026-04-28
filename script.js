@@ -14,11 +14,84 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    const studentInput = document.getElementById('studentName');
+    const searchBtn = document.getElementById('searchNameBtn');
+    const updateBtn = document.getElementById('updateNameBtn');
+
+    searchBtn.addEventListener('click', function() {
+        const nameValue = studentInput.value;
+
+        // Send the name to your PHP file
+        fetch(`search.php?name=${encodeURIComponent(nameValue)}`)
+            .then(response => response.text()) // Wait for the PHP response
+            .then(data => {
+                // 'data' is whatever your PHP file "echoes"
+                console.log("Response from PHP:", data);
+                alert("Result: " + data);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+    updateBtn.addEventListener('click', function() {
+        const nameValue = studentInput.value;
+
+        if (!nameValue) {
+            alert("Please enter a name to edit.");
+            return;
+        }
+
+        // Using POST to send data
+        fetch('update.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `studentName=${encodeURIComponent(nameValue)}&status=updated`
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("Server says:", data);
+            alert("Update status: " + data);
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+
+    if (document.getElementById("add_acc")) {
+        document.getElementById("add_acc").addEventListener('click', function() {
+            const student_query = document.getElementById("studentQueryAccountability").value.trim();
+            if (student_query === "") {
+                alert("Please enter a Student Number or Name first.");
+                return;
+            }
+            
+            const student = document.createElement("input");
+            student.type = "hidden";
+            student.name = "user_identifier";
+            student.value = student_query;
+
+        
+            document.getElementById("accForm").addEventListener("submit", function (e) {
+                const clone = document.getElementById("templateAccountability").content.cloneNode(true);
+                const title = document.getElementById("title").value.trim();
+                const amount = parseFloat(document.getElementById("amount").value.trim());
+                const status = document.querySelector('input[name="status"]:checked');
+
+                document.getElementById("accFormPlacement").appendChild(clone);
+            });
+            
+    
+        });
+        
+        const url = new URLSearchParams(window.location.search);
+        if(url.get('success') === '1') {
+            alert("Action successful!");
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }
+
 }); 
 
 
-
- 
 function validateForm(name, age, email, course, year_level, grad_status, file_input) {
     let isValid = true;
 
@@ -49,7 +122,6 @@ function validateForm(name, age, email, course, year_level, grad_status, file_in
     }
 
 
-
     if (file_input.files.length === 0) {
         isValid = false;
         alert("Please upload an image.");
@@ -58,63 +130,3 @@ function validateForm(name, age, email, course, year_level, grad_status, file_in
     return isValid;
 }
 
-const studentInput = document.getElementById('studentName');
-const searchBtn = document.getElementById('searchNameBtn');
-const updateBtn = document.getElementById('updateNameBtn');
-
-searchBtn.addEventListener('click', function() {
-    const nameValue = studentInput.value;
-
-    // Send the name to your PHP file
-    fetch(`search.php?name=${encodeURIComponent(nameValue)}`)
-        .then(response => response.text()) // Wait for the PHP response
-        .then(data => {
-            // 'data' is whatever your PHP file "echoes"
-            console.log("Response from PHP:", data);
-            alert("Result: " + data);
-        })
-        .catch(error => console.error('Error:', error));
-});
-updateBtn.addEventListener('click', function() {
-    const nameValue = studentInput.value;
-
-    if (!nameValue) {
-        alert("Please enter a name to edit.");
-        return;
-    }
-
-    // Using POST to send data
-    fetch('update.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `studentName=${encodeURIComponent(nameValue)}&status=updated`
-    })
-    .then(response => response.text())
-    .then(data => {
-        console.log("Server says:", data);
-        alert("Update status: " + data);
-    })
-    .catch(error => console.error('Error:', error));
-});
-
-
-
-document.getElementById("add_acc").addEventListener('click', function() {
-const template = document.getElementById("templateAccountability");
-
-// wait
-
-document.getElementById("accForm").addEventListener("submit", function (e) {
-        const title = document.getElementById("title").value.trim();
-        const amount = parseFloat(document.getElementById("amount").value.trim());
-        const status = document.querySelector('input[name="status"]:checked');
-       
-        if (!validateForm(name, age, email, course, year_level, avatar)) {
-            e.preventDefault();
-            return;
-        }
-    });
-
-});

@@ -77,10 +77,10 @@ if (isset($_POST['register'])) {
 }
 
 // 4. Add accountability (Insert)
-if (isset($_POST['submit'])) {
+if (isset($_POST['register2'])) {
     $user_id = $_POST['user_id'];
     $title = $_POST['title'];
-    $amount = (decimal) $_POST['amount'];
+    $amount = (float) $_POST['amount'];
     $status = $_POST['status'];
 
     $stmt = $conn->prepare("INSERT INTO Accountability (user_id, title, amount, status) VALUES (?, ?, ?, ?)");
