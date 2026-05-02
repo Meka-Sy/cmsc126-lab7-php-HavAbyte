@@ -1,18 +1,70 @@
 // Form validation before inserting to the database
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("regisForm").addEventListener("submit", function (e) {
-        const name = document.getElementById("name").value.trim();
-        const age = parseInt(document.getElementById("age").value);
-        const email = document.getElementById("email").value.trim();
-        const course = document.getElementById("course").value.trim();
-        const year_level = document.querySelector('input[name="year_level"]:checked');
-        const file_input = document.querySelector('input[name="profile_photo"]');
 
-        if (!validateForm(name, age, email, course, year_level, file_input)) {
-            e.preventDefault();
-            return;
-        }
-    });
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.get('success') === '1') {
+        alert("Request successful!");
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    // Register new user   
+    if (document.getElementById("regisForm")) { 
+        document.getElementById("regisForm").addEventListener("submit", function (e) {
+            const name = document.getElementById("name").value.trim();
+            const age = parseInt(document.getElementById("age").value);
+            const email = document.getElementById("email").value.trim();
+            const course = document.getElementById("course").value.trim();
+            const year_level = document.querySelector('input[name="year_level"]:checked');
+            const file_input = document.querySelector('input[name="profile_photo"]');
+
+            if (!validateForm(name, age, email, course, year_level, file_input)) {
+                e.preventDefault();
+                return;
+            }
+        });
+    }
+
+    // Add accountability
+    if (document.getElementById("add_acc")) {
+        document.getElementById("add_acc").addEventListener('click', function() {
+            const student_query = document.getElementById("studentQueryAccountability").value.trim();
+            if (student_query === "") {
+                alert("Please enter a Student Number or Name first.");
+                return;
+            }
+
+            const placement = document.getElementById("accFormPlacement");
+            placement.innerHTML = "";
+            
+            const clone = document.getElementById("templateAccountability").content.cloneNode(true);
+            const form = clone.querySelector("form");
+
+            const student = document.createElement("input");
+            student.type = "hidden";
+            student.name = "student_identifier";
+            student.value = student_query;
+            form.appendChild(student);
+
+            form.addEventListener('submit', function (e) {
+                const title = form.querySelector('[name="title"]').value.trim();
+                const amount = parseFloat(form.querySelector('[name="amount"]').value);
+                const status = form.querySelector('select[name="status"]').value;
+                
+                if (!validateAcc(title, amount, status)) {
+                    e.preventDefault();
+                    return;
+                }
+
+                placement.appendChild(clone);
+            });
+
+            
+            
+    
+        });
+    }
+
+
 
     const studentInput = document.getElementById('studentName');
     const searchBtn = document.getElementById('searchNameBtn');
@@ -54,49 +106,6 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error('Error:', error));
     });
-
-
-    if (document.getElementById("add_acc")) {
-        document.getElementById("add_acc").addEventListener('click', function() {
-            const student_query = document.getElementById("studentQueryAccountability").value.trim();
-            if (student_query === "") {
-                alert("Please enter a Student Number or Name first.");
-                return;
-            }
-            
-            const clone = document.getElementById("templateAccountability").content.cloneNode(true);
-            const form = clone.querySelector("form");
-
-            const student = document.createElement("input");
-            student.type = "hidden";
-            student.name = "student_identifier";
-            student.value = student_query;
-            form.appendChild(student);
-
-            form.addEventListener('submit', function (e) {
-                const title = form.querySelector('[name="title"]').value.trim();
-                const amount = parseFloat(form.querySelector('[name="amount"]').value);
-                const status = form.querySelector('select[name="status"]').value;
-                
-                if (!validateAcc(title, amount, status)) {
-                    e.preventDefault();
-                    return;
-                }
-
-            });
-
-            document.getElementById("accFormPlacement").appendChild(clone);
-            
-    
-        });
-        
-        const url = new URLSearchParams(window.location.search);
-        if(url.get('success') === '1') {
-            alert("Action successful!");
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-    }
-
 }); 
 
 
