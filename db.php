@@ -68,12 +68,7 @@ if (isset($_POST['register'])) {
     if ($stmt->execute()) {
         header("Location:index.html?success=1");
         exit();
-    } else {
-        echo "Error: " . $stmt->error;
     }
-
-    $stmt->close();
-    
 }
 
 // 4. Add accountability (Insert)
@@ -96,17 +91,11 @@ if (isset($_POST['register2'])) {
         if ($stmt->execute()) {
             header("Location:index.html?success=1");
             exit();
-        } else {
-            echo "Error: " . $stmt->error;
         }
-
-        $stmt->close(); 
     }
-    
     else {
         echo "<script>alert('User not found. Cannot add accountability.'); window.location='index.html';</script>";
     }
-    
 }
 
 // 4. Handle Delete
