@@ -75,6 +75,8 @@ if (isset($_POST['search_student'])) {
             $searchTerm = "%$query%";
             $stmt = $conn->prepare("SELECT * FROM Users WHERE name LIKE ?");
             $stmt->bind_param("s", $searchTerm);
+}
+            
         }
 
         $stmt->execute();
@@ -111,7 +113,6 @@ if (isset($_POST['search_student'])) {
     }
 }
 
-
 if (isset($_POST['search_acc'])) {
     $query = trim($_POST['student_query'] ?? '');
 
@@ -137,6 +138,5 @@ if (isset($_POST['search_acc'])) {
         $stmt->close();
     }
 }
-
 $conn->close();
 ?>
