@@ -62,7 +62,7 @@
                     <input type="text" id="studentQueryRecord" name="student_query" placeholder="Enter Student Name or Number" required>
                     <br>
                     <button type="submit" name="search_student" class="ID btn-search">Search Student</button> <br>
-                    <button type="submit" name="update_student" class="ID btn-update">Update Student</button> <br>
+                    <button type="button" name="update_student" id="updateStudentBtn" class="ID btn-update">Update Student</button> <br>
                     <button type="submit" name="delete_student" class="ID btn-delete">Delete Student</button><br>
                 </div>
             </form>
@@ -77,7 +77,6 @@
             </form>
                 
         </div>
-
         <template id="templateAccountability" class="templateAccountability">
             <form class="Form2" id="accForm" action="db.php" method="post" enctype="multipart/form-data">
                 <h5>All fields must be filled</h5>

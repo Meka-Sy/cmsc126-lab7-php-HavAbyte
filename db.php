@@ -50,7 +50,7 @@ if (isset($_POST['register'])) {
 }
 
 if (isset($_POST['delete_student'])) {
-    $id = $_POST['student_query']; 
+    $query = $_POST['student_query']; 
     $stmt = $conn->prepare("DELETE FROM Users WHERE id=? OR name=?");
     $stmt->bind_param("is", $query,$query);
     

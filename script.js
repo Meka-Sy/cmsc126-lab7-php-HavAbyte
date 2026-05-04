@@ -53,43 +53,13 @@ function validateForm(name, age, email, course, year_level, grad_status, file_in
     return isValid;
 }
 
-const studentInput = document.getElementById('studentName');
-const searchBtn = document.getElementById('searchNameBtn');
-const updateBtn = document.getElementById('updateNameBtn');
+document.getElementById("updateStudentBtn").addEventListener("click", function () {
+        const query = document.getElementById("studentQueryRecord").value;
 
-searchBtn.addEventListener('click', function() {
-    const nameValue = studentInput.value;
+        if (!query) {
+            alert("Enter Student ID or Name");
+            return;
+        }
 
-    // Send the name to your PHP file
-    fetch(`search.php?name=${encodeURIComponent(nameValue)}`)
-        .then(response => response.text()) // Wait for the PHP response
-        .then(data => {
-            // 'data' is whatever your PHP file "echoes"
-            console.log("Response from PHP:", data);
-            alert("Result: " + data);
-        })
-        .catch(error => console.error('Error:', error));
-});
-updateBtn.addEventListener('click', function() {
-    const nameValue = studentInput.value;
-
-    if (!nameValue) {
-        alert("Please enter a name to edit.");
-        return;
-    }
-
-    // Using POST to send data
-    fetch('update.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `studentName=${encodeURIComponent(nameValue)}&status=updated`
-    })
-    .then(response => response.text())
-    .then(data => {
-        console.log("Server says:", data);
-        alert("Update status: " + data);
-    })
-    .catch(error => console.error('Error:', error));
-});
+        window.location.href = `update_student.php?query=${encodeURIComponent(query)}`;
+}
