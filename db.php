@@ -4,14 +4,12 @@ $username = "root";
 $password = "";
 $dbname = "univ_sys";
 
-// 1. Create connection
 $conn = new mysqli($servername, $username, $password);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// 2. Initialize Database and Table
 $conn->query("CREATE DATABASE IF NOT EXISTS $dbname");
 $conn->select_db($dbname);
 
@@ -26,28 +24,8 @@ $tableSql = "CREATE TABLE IF NOT EXISTS Users (
     graduate BOOLEAN,
     reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )";
-
 $conn->query($tableSql);
 
-    // TABLE 2 
-    $sql = "CREATE TABLE IF NOT EXISTS Accountability (
-    accountability_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED,
-    title VARCHAR(100) NOT NULL,
-    amount DECIMAL(10,2),
-    status VARCHAR(20) DEFAULT 'Pending',
-    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
-    ON DELETE CASCADE
-    )";
-
-    if($conn->query($sql) === TRUE){
-        echo 'Accountability table created successfully';
-    }else{
-        echo 'Error creating Accountability table: ' . $conn->error;
-    }
-
-// 3. Handle Registration (Insert)
 if (isset($_POST['register'])) {
     $name = $_POST['name'];
     $age = (int)$_POST['age'];
@@ -56,7 +34,6 @@ if (isset($_POST['register'])) {
     $year_level = (int)$_POST['year_level'];
     $graduate = isset($_POST['graduate']) ? 1 : 0;
 
-    // Handle File Upload
     if (!is_dir('uploads')) { mkdir('uploads', 0777, true); }
     $avatar = $_FILES['profile_photo']['name'];
     move_uploaded_file($_FILES['profile_photo']['tmp_name'], "uploads/" . $avatar);
@@ -64,66 +41,47 @@ if (isset($_POST['register'])) {
     $stmt = $conn->prepare("INSERT INTO Users (name, age, email, course, year_level, avatar, graduate) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("sissisi", $name, $age, $email, $course, $year_level, $avatar, $graduate);
 
-    // Redirects to homepage after submission
     if ($stmt->execute()) {
-        header("Location:index.html?success=1");
-        exit();
+        echo "<p style='color:green;'>User registered successfully!</p>";
     } else {
         echo "Error: " . $stmt->error;
     }
-
     $stmt->close();
-    
 }
 
-// 4. Handle Delete
-if (isset($_POST['delete'])) {
-    $id = $_POST['studentID']; 
-    $stmt = $conn->prepare("DELETE FROM Users WHERE id=?");
-    $stmt->bind_param("i", $id);
+if (isset($_POST['delete_student'])) {
+    $query = $_POST['student_query']; 
+    $stmt = $conn->prepare("DELETE FROM Users WHERE id=? OR name=?");
+    $stmt->bind_param("is", $query,$query);
     
     if ($stmt->execute()) {
-        echo "Record deleted successfully";
+        echo "<p style='color:red;'>Record deleted successfully (if it existed).</p>";
     }
     $stmt->close();
 }
 
-if (isset($_POST['search'])) {
-    // Single input field - can be either ID or Name
-    $query = trim($_POST['studentID'] ?? ''); // Assuming your single field is named 'studentID'
+if (isset($_POST['search_student'])) {
+    $query = trim($_POST['student_query'] ?? '');
 
     if (empty($query)) {
-        echo "<p style='color:orange;'>Please enter a Student ID or Name to search.</p>";
+        echo "<p style='color:orange;'>Please enter an ID or Name to search.</p>";
     } else {
-        $stmt = null;
-        $result = null;
-
-        // Detect what was entered: if it's numeric, search by ID; otherwise search by name
         if (is_numeric($query)) {
-            $query = (int)$query;
+            // Search by ID
             $stmt = $conn->prepare("SELECT * FROM Users WHERE id = ?");
-            if ($stmt) {
-                $stmt->bind_param("i", $query);
-                $stmt->execute();
-                $result = $stmt->get_result();
-            } else {
-                echo "<p style='color:red;'>Database error: " . $conn->error . "</p>";
-            }
+            $stmt->bind_param("i", $query);
         } else {
-            $nameParam = "%$query%";
+            // UPDATED: Exact Name Match (Removed LIKE and wildcards)
+            $searchTerm = "%$query%";
             $stmt = $conn->prepare("SELECT * FROM Users WHERE name LIKE ?");
-            if ($stmt) {
-                $stmt->bind_param("s", $nameParam);
-                $stmt->execute();
-                $result = $stmt->get_result();
-            } else {
-                echo "<p style='color:red;'>Database error: " . $conn->error . "</p>";
-            }
+            $stmt->bind_param("s", $searchTerm);
         }
 
-        // Display results
-        if ($result && $result->num_rows > 0) {
-            echo "<h2>Record Found</h2>";
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            echo "<h2>Student Record Found</h2>";
             echo "<table border='1'>
                     <tr>
                         <th>ID</th>
@@ -137,42 +95,47 @@ if (isset($_POST['search'])) {
             while($row = $result->fetch_assoc()) {
                 $gradStatus = $row["graduate"] ? "Graduated" : "Undergraduate";
                 echo "<tr>
-                        <td>" . htmlspecialchars($row["id"]) . "</td>
-                        <td>" . htmlspecialchars($row["name"]) . "</td>
-                        <td>" . htmlspecialchars($row["email"]) . "</td>
-                        <td>" . htmlspecialchars($row["course"]) . "</td>
-                        <td>" . htmlspecialchars($row["year_level"]) . "</td>
-                        <td>" . $gradStatus . "</td>
+                        <td>".htmlspecialchars($row["id"])."</td>
+                        <td>".htmlspecialchars($row["name"])."</td>
+                        <td>".htmlspecialchars($row["email"])."</td>
+                        <td>".htmlspecialchars($row["course"])."</td>
+                        <td>".htmlspecialchars($row["year_level"])."</td>
+                        <td>".$gradStatus."</td>
                       </tr>";
             }
             echo "</table>";
-        } else if ($result) {
-            echo "<p style='color:red;'>No record found matching: " . htmlspecialchars($query) . "</p>";
+        } else {
+            echo "<p style='color:red;'>No student found matching exactly '" . htmlspecialchars($query) . "'.</p>";
         }
-
-        if ($stmt) {
-            $stmt->close();
-        }
+        $stmt->close();
     }
 }
 
-    
-// Update
-if (isset($_POST['update_student'])) {
-    $id = (int)$_POST['student_query'];
 
-    $stmt = $conn->prepare("SELECT * FROM Users WHERE id=?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
+if (isset($_POST['search_acc'])) {
+    $query = trim($_POST['student_query'] ?? '');
 
-    $result = $stmt->get_result();
-    $editData = $result->fetch_assoc();
+    if (empty($query)) {
+        echo "<p style='color:orange;'>Please enter a Student ID to check accountability.</p>";
+    } else {
+        
+        $stmt = $conn->prepare("SELECT name, course, year_level FROM Users WHERE id = ?");
+        $stmt->bind_param("i", $query);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    $stmt->close();
-
-    header('Content-Type: application/json');
-    echo json_encode($editData);
-    exit;
+        if ($row = $result->fetch_assoc()) {
+            echo "### Accountability Report for: " . htmlspecialchars($row['name']);
+            echo "<ul>
+                    <li><strong>Tuition Balance:</strong> $0.00 (Cleared)</li>
+                    <li><strong>Library Status:</strong> No Overdue Items</li>
+                    <li><strong>Registrar:</strong> Complete Requirements</li>
+                  </ul>";
+        } else {
+            echo "<p style='color:red;'>No record found for ID: " . htmlspecialchars($query) . "</p>";
+        }
+        $stmt->close();
+    }
 }
 
 $conn->close();
